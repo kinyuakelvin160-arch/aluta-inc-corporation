@@ -1,0 +1,196 @@
+from pathlib import Path
+import zipfile, textwrap, os
+
+out = Path("/mnt/data/aluta_inc_website")
+out.mkdir(parents=True, exist_ok=True)
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ALUTA INC CORPORATION — Kenyan and global market snapshots, market insights and watchlists.">
+<meta name="theme-color" content="#061b35">
+<title>ALUTA INC CORPORATION | Markets • Insights • Opportunities</title>
+<style>
+:root{--navy:#061b35;--navy2:#09294b;--green:#00d68f;--green2:#009c65;--ink:#102b4d;--muted:#5c7694;--line:#d7e6f5;--paper:#f4f8fc;--white:#fff;--red:#e34858;--shadow:0 10px 30px rgba(6,27,53,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button{cursor:pointer}
+.topbar{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid #173b5c}.nav{max-width:1220px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:15px 22px}.brand{display:flex;align-items:center;gap:10px;min-width:235px}.brand-mark{color:var(--green);font-size:37px;line-height:1;font-weight:900}.brand-name{font-size:20px;font-weight:900;letter-spacing:.4px;line-height:1.05}.brand-name span{display:block;color:var(--green);font-size:12px;letter-spacing:3px;margin-top:4px}.tagline{font-size:9px;color:#c5d5e6;letter-spacing:1.1px;margin-top:4px}.navlinks{display:flex;align-items:center;gap:25px;font-size:13px;font-weight:650}.navlinks a{color:#d9e5f2}.navlinks a:hover,.navlinks a.active{color:var(--green)}.nav-right{font-size:12px;color:#d9e5f2;white-space:nowrap}.menu-btn{display:none;background:transparent;border:1px solid #36516b;color:#fff;border-radius:8px;padding:8px 10px}
+.hero{background:radial-gradient(circle at 76% 20%,#16466a 0,#0a2a49 32%,#061b35 72%);color:#fff;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,27,53,.08),rgba(6,27,53,.55)),repeating-linear-gradient(120deg,transparent 0 70px,rgba(255,255,255,.025) 71px 72px);pointer-events:none}.hero-inner{max-width:1220px;margin:auto;padding:48px 22px 42px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;position:relative;z-index:1}.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#007c52;color:#fff;border-radius:7px;padding:7px 12px;font-size:11px;font-weight:850;letter-spacing:.4px}.dot{width:7px;height:7px;background:#a2ffda;border-radius:50%;box-shadow:0 0 0 4px #ffffff22}.hero h1{font-size:clamp(32px,4vw,51px);line-height:1.05;letter-spacing:-1.7px;margin:17px 0 16px;max-width:680px}.hero h1 span{color:var(--green)}.hero-copy{font-size:15px;line-height:1.7;color:#e0eaf5;max-width:570px}.features{display:flex;flex-wrap:wrap;gap:17px;margin-top:27px}.feature{display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.3;color:#e9f4ff;padding-right:17px;border-right:1px solid #4c6a86}.feature:last-child{border:0}.feature b{font-size:21px;color:var(--green)}
+.optin{background:#fff;color:var(--ink);border-radius:15px;padding:25px;box-shadow:0 20px 50px #0003;max-width:470px;width:100%;justify-self:end}.optin h2{font-size:23px;margin:0 0 8px}.optin p{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 17px}.field{width:100%;border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin:0 0 9px;background:#fbfdff;color:var(--ink);outline:none}.field:focus{border-color:#00a873;box-shadow:0 0 0 3px #00d68f20}.primary{width:100%;border:0;border-radius:8px;background:linear-gradient(90deg,#00a86c,#008c5b);color:#fff;padding:13px 16px;font-weight:850}.primary:hover{filter:brightness(1.07)}.privacy{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}.form-message{font-size:12px;line-height:1.5;margin-top:10px;display:none}.form-message.show{display:block}.small-note{font-size:10px;color:#7890a9;margin-top:9px}
+main{max-width:1220px;margin:auto;padding:22px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin:3px 0 15px}.section-title h2{margin:0;font-size:23px;letter-spacing:-.5px}.section-title p{margin:5px 0 0;font-size:12px;color:var(--muted)}.timestamp{font-size:11px;color:var(--muted)}.market-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:15px}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 3px 12px #173b5c08;overflow:hidden}.panel-pad{padding:17px}.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}.panel-head h3{margin:0;font-size:18px}.subhead{font-size:11px;color:var(--muted);margin-top:4px}.market-open{font-size:10px;color:#008a5c;white-space:nowrap}.metrics{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden}.metric{padding:13px 12px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric label{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}.metric strong{display:block;font-size:22px;margin:5px 0 2px;letter-spacing:-.5px}.metric span{font-size:11px;color:var(--muted)}.up{color:var(--green2)!important}.down{color:var(--red)!important}.movers-title{font-size:13px;font-weight:850;margin:17px 0 9px}.movers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mover-box{border:1px solid var(--line);border-radius:8px;overflow:hidden}.mover-box h4{margin:0;padding:9px 10px;font-size:11px;background:#effbf5;color:#00895b}.mover-box.losers h4{background:#fff1f2;color:#d92f43}.mover-row{display:grid;grid-template-columns:1.3fr .8fr .75fr;gap:5px;padding:7px 9px;border-top:1px solid #edf2f7;font-size:10px;align-items:center}.mover-row span:nth-child(2),.mover-row span:nth-child(3){text-align:right}.mover-row.head{color:var(--muted);font-size:9px;background:#fbfdff}.chart-panel{background:linear-gradient(145deg,#082744,#061b35);color:#fff}.chart-panel .panel-pad{padding:18px}.chart-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.chart-top h3{font-size:14px;margin:0}.chart-value{text-align:right;font-size:23px;font-weight:850}.chart-value small{display:block;font-size:12px;color:var(--green);margin-top:2px}.chart-wrap{height:220px;margin-top:12px}.chart-wrap canvas{width:100%;height:100%;display:block}.insight{margin-top:12px;background:#eef8ff;border:1px solid #cde6f8;border-radius:9px;padding:15px;display:flex;gap:12px}.insight-icon{font-size:22px}.insight h4{margin:0 0 5px;font-size:13px}.insight p{margin:0;font-size:11px;line-height:1.6;color:#42617f}
+.world{margin-top:15px}.index-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.index-card{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff;min-width:0}.index-head{display:flex;align-items:center;gap:8px}.flag{font-size:23px}.index-name{font-size:10px;font-weight:850}.index-price{font-size:17px;font-weight:850;margin:8px 0 3px}.index-change{font-size:11px;font-weight:800}.world-bottom{display:grid;grid-template-columns:1fr 1fr .95fr;gap:12px;margin-top:13px}.promo{border-radius:9px;background:linear-gradient(135deg,#e7f5ff,#d5efff);padding:18px;display:flex;flex-direction:column;justify-content:center;text-align:center;min-height:190px}.promo h3{margin:0 0 8px;font-size:16px}.promo p{margin:0;color:#41617e;font-size:12px;line-height:1.5}.promo-icons{display:flex;justify-content:space-around;gap:8px;margin-top:18px;font-size:11px}.promo-icons b{display:block;font-size:22px;color:#087aaf;margin-bottom:5px}.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.secondary{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--ink);font-size:12px;font-weight:750}.secondary:hover{border-color:#00a873}.statusline{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:11px;color:var(--muted);margin-top:14px}.footer{background:var(--navy);color:#fff;margin-top:24px}.footer-inner{max-width:1220px;margin:auto;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.footer .brand-name{font-size:17px}.footer-note{font-size:11px;color:#b9ccde;line-height:1.6}.footer-links{display:flex;gap:14px;font-size:12px;color:#d9e5f2}.disclaimer{font-size:10px;color:#a8bfd3;border-top:1px solid #24435e;padding:12px 22px;text-align:center}
+.toast{position:fixed;right:18px;bottom:18px;max-width:350px;background:#06243f;color:white;padding:14px 17px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;z-index:50;display:none}.toast.show{display:block}
+@media(max-width:900px){.navlinks{gap:13px}.nav-right{display:none}.hero-inner{grid-template-columns:1fr .9fr;gap:22px}.features{gap:10px}.feature{padding-right:10px}.market-grid{grid-template-columns:1fr}.index-grid{grid-template-columns:repeat(3,1fr)}.world-bottom{grid-template-columns:1fr 1fr}.promo{grid-column:1/-1}.optin{padding:20px}}
+@media(max-width:620px){.nav{padding:12px 16px}.brand{min-width:0}.brand-name{font-size:16px}.brand-name span{font-size:10px;letter-spacing:2px}.tagline{font-size:8px}.brand-mark{font-size:30px}.menu-btn{display:block}.navlinks{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding:14px 20px 18px;flex-direction:column;align-items:flex-start;border-top:1px solid #24435e}.navlinks.open{display:flex}.hero-inner{grid-template-columns:1fr;padding:32px 16px;gap:25px}.hero h1{font-size:37px}.hero-copy{font-size:14px}.optin{max-width:none}.features{display:grid;grid-template-columns:1fr 1fr}.feature{border:0;padding:0}main{padding:16px}.section-title{align-items:flex-start;flex-direction:column}.section-title h2{font-size:21px}.metrics{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:5px}.metric:last-child{border-bottom:0}.metric label{grid-column:1/-1}.metric strong{margin:0}.movers{grid-template-columns:1fr}.index-grid{grid-template-columns:repeat(2,1fr)}.world-bottom{grid-template-columns:1fr}.promo{grid-column:auto}.world-bottom .mover-box{min-width:0}.chart-wrap{height:190px}.statusline{align-items:flex-start;flex-direction:column}.footer-inner{padding:20px 16px}.footer-links{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#home" aria-label="ALUTA INC CORPORATION home">
+      <span class="brand-mark">↗</span><span><span class="brand-name">ALUTA INC<span>CORPORATION</span></span><span class="tagline">MARKETS · INSIGHTS · OPPORTUNITIES</span></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-label="Toggle navigation">☰ Menu</button>
+    <div class="navlinks" id="navlinks">
+      <a class="active" href="#home">Home</a><a href="#kenya">Kenyan Market</a><a href="#world">World Market</a><a href="#insights">News & Insights</a><a href="#about">About Us</a>
+    </div>
+    <div class="nav-right">↗ &nbsp; Smarter Decisions. Greater Opportunities.</div>
+  </nav>
+</header>
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> MARKET SNAPSHOT</span>
+      <h1>ALUTA INC CORPORATION<br>Kenyan & Global Shares<br><span>at Your Fingertips</span></h1>
+      <p class="hero-copy">Get a clear view of the Kenyan stock market and major world indices. Follow market trends, explore top movers, and make more informed decisions — all in one place.</p>
+      <div class="features">
+        <div class="feature"><b>▥</b><span>Market<br>Snapshots</span></div><div class="feature"><b>◎</b><span>Top Gainers<br>& Losers</span></div><div class="feature"><b>◷</b><span>Key Indices<br>& Trends</span></div><div class="feature"><b>♧</b><span>Daily Updates<br>(Email / WhatsApp)</span></div>
+      </div>
+    </div>
+    <form class="optin" id="signupForm">
+      <h2>Get the Latest Market Updates</h2>
+      <p>Join the update list to receive market snapshots and insights by email or WhatsApp.</p>
+      <label class="sr-only" for="fullName"></label><input class="field" id="fullName" name="name" placeholder="Full name" autocomplete="name" required>
+      <input class="field" id="email" name="email" type="email" placeholder="Email address" autocomplete="email" required>
+      <input class="field" id="phone" name="phone" type="tel" placeholder="+254… (optional WhatsApp)" autocomplete="tel">
+      <label style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#536d89;line-height:1.45;margin:3px 0 13px"><input type="checkbox" id="consent" required style="margin-top:2px"> I agree to receive market updates from ALUTA INC CORPORATION and understand I can unsubscribe.</label>
+      <button class="primary" type="submit">Opt In Now &nbsp; →</button>
+      <div class="privacy">🔒 Your details stay on this device in this demo.</div>
+      <div class="form-message" id="formMessage" role="status"></div>
+      <div class="small-note">Note: This prototype does not send messages or store subscribers on a server yet.</div>
+    </form>
+  </div>
+</section>
+<main>
+  <section id="kenya">
+    <div class="section-title"><div><h2>Kenyan Shares Market</h2><p>Nairobi Securities Exchange (NSE) · Market overview</p></div><div class="timestamp" id="updatedAt">Demo data · not live market prices</div></div>
+    <div class="market-grid">
+      <article class="panel"><div class="panel-pad">
+        <div class="panel-head"><div><h3>🇰🇪 Nairobi Securities Exchange</h3><div class="subhead">Indicative snapshot · sample values</div></div><span class="market-open">● Demo mode</span></div>
+        <div class="metrics">
+          <div class="metric"><label>NSE 20 (sample)</label><strong id="nseValue">1,648.32</strong><span class="up">▲ +0.76%</span></div>
+          <div class="metric"><label>Trading volume</label><strong>52.3M</strong><span>Shares · sample</span></div>
+          <div class="metric"><label>Total value</label><strong>KES 1.21B</strong><span>Turnover · sample</span></div>
+        </div>
+        <div class="movers-title">Top Movers (illustrative)</div>
+        <div class="movers">
+          <div class="mover-box"><h4>↗ Top Gainers</h4><div class="mover-row head"><span>Symbol</span><span>Price (KES)</span><span>Change</span></div>
+            <div class="mover-row"><span>Safaricom</span><span>18.35</span><span class="up">▲ 2.45%</span></div><div class="mover-row"><span>KCB Group</span><span>45.00</span><span class="up">▲ 1.80%</span></div><div class="mover-row"><span>Equity Group</span><span>56.75</span><span class="up">▲ 1.52%</span></div><div class="mover-row"><span>EABL</span><span>180.00</span><span class="up">▲ 1.21%</span></div><div class="mover-row"><span>Co-op Bank</span><span>16.20</span><span class="up">▲ 0.93%</span></div>
+          </div>
+          <div class="mover-box losers"><h4>↘ Top Losers</h4><div class="mover-row head"><span>Symbol</span><span>Price (KES)</span><span>Change</span></div>
+            <div class="mover-row"><span>KenGen</span><span>4.82</span><span class="down">▼ 2.83%</span></div><div class="mover-row"><span>Flame Tree</span><span>1.76</span><span class="down">▼ 2.22%</span></div><div class="mover-row"><span>BAT Kenya</span><span>410.00</span><span class="down">▼ 1.67%</span></div><div class="mover-row"><span>Britam</span><span>8.90</span><span class="down">▼ 1.33%</span></div><div class="mover-row"><span>Carbacid</span><span>24.10</span><span class="down">▼ 1.23%</span></div>
+          </div>
+        </div>
+      </div></article>
+      <div>
+        <article class="panel chart-panel"><div class="panel-pad">
+          <div class="chart-top"><h3>NSE 20 Index · Sample 7-day trend</h3><div class="chart-value">1,648.32<small>▲ +0.76%</small></div></div>
+          <div class="chart-wrap"><canvas id="nseChart" aria-label="Illustrative NSE 20 seven day trend chart"></canvas></div>
+        </div></article>
+        <article class="insight" id="insights"><div class="insight-icon">💡</div><div><h4>Market Insight</h4><p>This is a sample insight card. Replace it with verified exchange data and reviewed market commentary before publishing.</p></div></article>
+      </div>
+    </div>
+  </section>
+  <section class="world" id="world">
+    <div class="section-title"><div><h2>World Shares Market</h2><p>Major global indices · illustrative values for layout preview</p></div><div class="tools"><button class="secondary" id="refreshBtn">↻ Refresh demo</button><button class="secondary" id="watchBtn">☆ Add to watchlist</button></div></div>
+    <div class="index-grid" id="indexGrid">
+      <article class="index-card"><div class="index-head"><span class="flag">🇺🇸</span><span class="index-name">S&P 500</span></div><div class="index-price">6,735.28</div><div class="index-change up">▲ +0.82%</div></article>
+      <article class="index-card"><div class="index-head"><span class="flag">🇺🇸</span><span class="index-name">NASDAQ</span></div><div class="index-price">22,953.31</div><div class="index-change up">▲ +1.12%</div></article>
+      <article class="index-card"><div class="index-head"><span class="flag">🇬🇧</span><span class="index-name">FTSE 100</span></div><div class="index-price">8,345.67</div><div class="index-change up">▲ +0.47%</div></article>
+      <article class="index-card"><div class="index-head"><span class="flag">🇩🇪</span><span class="index-name">DAX</span></div><div class="index-price">24,325.18</div><div class="index-change up">▲ +0.69%</div></article>
+      <article class="index-card"><div class="index-head"><span class="flag">🇫🇷</span><span class="index-name">CAC 40</span></div><div class="index-price">7,732.12</div><div class="index-change up">▲ +0.58%</div></article>
+      <article class="index-card"><div class="index-head"><span class="flag">🇯🇵</span><span class="index-name">Nikkei 225</span></div><div class="index-price">48,716.43</div><div class="index-change up">▲ +0.72%</div></article>
+    </div>
+    <div class="world-bottom">
+      <div class="mover-box"><h4>↗ Top Global Movers · illustrative</h4><div class="mover-row head"><span>Company</span><span>Price (USD)</span><span>Change</span></div><div class="mover-row"><span>NVIDIA</span><span>188.32</span><span class="up">▲ 4.21%</span></div><div class="mover-row"><span>Apple</span><span>236.48</span><span class="up">▲ 2.76%</span></div><div class="mover-row"><span>Microsoft</span><span>516.90</span><span class="up">▲ 1.98%</span></div><div class="mover-row"><span>Alphabet</span><span>182.41</span><span class="up">▲ 1.74%</span></div><div class="mover-row"><span>Amazon</span><span>214.36</span><span class="up">▲ 1.52%</span></div></div>
+      <div class="mover-box losers"><h4>↘ Global Movers · illustrative</h4><div class="mover-row head"><span>Company</span><span>Price (USD)</span><span>Change</span></div><div class="mover-row"><span>Tesla</span><span>238.12</span><span class="down">▼ 3.21%</span></div><div class="mover-row"><span>Meta</span><span>589.40</span><span class="down">▼ 2.76%</span></div><div class="mover-row"><span>Netflix</span><span>1,025.33</span><span class="down">▼ 2.14%</span></div><div class="mover-row"><span>Intel</span><span>28.76</span><span class="down">▼ 1.98%</span></div><div class="mover-row"><span>Pfizer</span><span>23.41</span><span class="down">▼ 1.62%</span></div></div>
+      <aside class="promo"><h3>Global markets. Local insights.<br>Bigger opportunities.</h3><p>Build your market knowledge with a clear view of key indices and trends.</p><div class="promo-icons"><span><b>◎</b>Market data</span><span><b>▥</b>Trends</span><span><b>♧</b>Price alerts</span></div></aside>
+    </div>
+    <div class="statusline"><span id="demoStatus">Demo snapshot loaded. No live exchange connection is configured.</span><span>Prices and percentages are placeholders, not investment advice.</span></div>
+  </section>
+  <section class="panel" id="about" style="margin-top:18px"><div class="panel-pad" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">About ALUTA INC CORPORATION</h3><p style="margin:0;color:var(--muted);font-size:13px;line-height:1.6;max-width:760px">A market-information concept designed to bring Kenyan and international market snapshots, key movers, and useful context together in one place. Data partnerships and source attribution should be added before public launch.</p></div><a class="secondary" href="#home">Back to top ↑</a></div></section>
+</main>
+<footer class="footer"><div class="footer-inner"><a class="brand" href="#home"><span class="brand-mark">↗</span><span><span class="brand-name">ALUTA INC<span>CORPORATION</span></span><span class="tagline">MARKETS · INSIGHTS · OPPORTUNITIES</span></span></a><div class="footer-links"><a href="#kenya">Kenya</a><a href="#world">Global Markets</a><a href="#insights">Insights</a><a href="#about">About</a></div><div class="footer-note">Build wealth with information.<br>Trade smarter. Grow together.</div></div><div class="disclaimer">© <span id="year"></span> ALUTA INC CORPORATION. All rights reserved. &nbsp; · &nbsp; Market data shown is illustrative and not financial advice.</div></footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const $ = id => document.getElementById(id);
+$('year').textContent = new Date().getFullYear();
+$('updatedAt').textContent = 'Demo data · ' + new Date().toLocaleString();
+$('menuBtn').addEventListener('click',()=>{const open=$('navlinks').classList.toggle('open');$('menuBtn').setAttribute('aria-expanded',String(open));});
+document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',()=>{$('navlinks').classList.remove('open');$('menuBtn').setAttribute('aria-expanded','false');}));
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4000);}
+$('signupForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=$('fullName').value.trim(),email=$('email').value.trim(),phone=$('phone').value.trim();
+ if(!name||!email||!$('consent').checked){$('formMessage').textContent='Please complete the required fields and give consent.';$('formMessage').style.color='#c83245';$('formMessage').classList.add('show');return;}
+ // Local prototype only: keep the opt-in record on this browser, never claim a server subscription.
+ const records=JSON.parse(localStorage.getItem('alutaOptIns')||'[]');
+ records.push({name,email,phone,consent:true,date:new Date().toISOString()});
+ localStorage.setItem('alutaOptIns',JSON.stringify(records));
+ $('formMessage').textContent='Thanks, '+name+'! Your details were saved in this browser only. To receive real updates, connect a mailing-list or messaging service.';
+ $('formMessage').style.color='#00895b';$('formMessage').classList.add('show');$('signupForm').reset();
+});
+$('refreshBtn').addEventListener('click',()=>{
+ const vals=[1648.32,1650.18,1643.77,1654.09,1649.86,1658.12,1648.32];
+ const base=vals[Math.floor(Math.random()*vals.length)];
+ $('nseValue').textContent=base.toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2});
+ $('updatedAt').textContent='Demo refreshed · '+new Date().toLocaleTimeString();
+ $('demoStatus').textContent='Demo display refreshed locally at '+new Date().toLocaleTimeString()+'. No external market feed was called.';
+ drawChart();toast('Demo display refreshed. This is not a live market update.');
+});
+$('watchBtn').addEventListener('click',()=>{
+ const key='alutaWatchlist';const items=JSON.parse(localStorage.getItem(key)||'[]');
+ if(items.includes('NSE 20')){toast('NSE 20 is already in your local watchlist.');return;}
+ items.push('NSE 20');localStorage.setItem(key,JSON.stringify(items));$('watchBtn').textContent='★ In watchlist';toast('NSE 20 added to your browser-only watchlist.');
+});
+function drawChart(){
+ const canvas=$('nseChart'),ctx=canvas.getContext('2d'),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ canvas.width=Math.max(1,rect.width*dpr);canvas.height=Math.max(1,rect.height*dpr);ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:35,r:8,t:12,b:25},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+ ctx.clearRect(0,0,w,h);
+ const vals=[1618,1620,1631,1643,1637,1624,1618,1620,1627,1634,1640,1648,1654,1652,1659];
+ const min=1580,max=1680;
+ ctx.font='10px system-ui';ctx.textAlign='right';ctx.fillStyle='#c6d7e8';ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=1;
+ for(let v=min;v<=max;v+=20){const y=pad.t+(max-v)/(max-min)*ch;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(v.toLocaleString(),pad.l-7,y+3);}
+ const pts=vals.map((v,i)=>({x:pad.l+i*cw/(vals.length-1),y:pad.t+(max-v)/(max-min)*ch}));
+ const grad=ctx.createLinearGradient(0,pad.t,0,h-pad.b);grad.addColorStop(0,'rgba(0,214,143,.45)');grad.addColorStop(1,'rgba(0,214,143,.015)');
+ ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,h-pad.b);ctx.lineTo(pts[0].x,h-pad.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+ ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle='#00e49a';ctx.lineWidth=2.5;ctx.stroke();
+ pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,2.8,0,Math.PI*2);ctx.fillStyle='#00e49a';ctx.fill();});
+ const labels=['14 Oct','15 Oct','16 Oct','17 Oct','18 Oct','19 Oct','20 Oct'];ctx.textAlign='center';ctx.fillStyle='#d5e4f2';
+ labels.forEach((lab,i)=>ctx.fillText(lab,pad.l+i*cw/(labels.length-1),h-5));
+}
+window.addEventListener('resize',drawChart);drawChart();
+</script>
+</body>
+</html>'''
+
+readme = """ALUTA INC CORPORATION — single-page website prototype
+
+FILES
+- index.html: responsive website, CSS and JavaScript included in one file.
+
+HOW TO RUN
+1. Extract the ZIP file.
+2. Open index.html in Chrome, Edge, Firefox or another modern browser.
+3. To publish it, upload index.html to a static hosting provider such as GitHub Pages, Netlify or Cloudflare Pages.
+
+WHAT WORKS
+- Responsive navigation and page sections.
+- Market dashboard layout and a canvas-based sample trend chart.
+- Refresh demo button and browser-local watchlist.
+- Opt-in form validation and local browser storage.
+
+IMPORTANT BEFORE LAUNCH
+This is a front-end prototype. All market figures are illustrative placeholders, not verified live prices. The refresh button changes the demo display only. The opt-in form saves entries only in the visitor's browser; it does not send email/WhatsApp messages or add subscribers to a server. To launch publicly, connect a licensed/authorized market-data provider and a mailing-list/CRM or WhatsApp Business messaging service, add privacy/consent terms, and test thoroughly. Do not present the sample figures as live market data or investment advice.
+"""
+(out/"index.html").write_text(html, encoding="utf-8")
+(out/"README.txt").write_text(readme, encoding="utf-8")
+zip_path=Path("/mnt/data/ALUTA_INC_CORPORATION_Website.zip")
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    z.write(out/"index.html","index.html")
+    z.write(out/"README.txt","README.txt")
+print("Created website files:")
+print(out/"index.html")
+print(zip_path)
