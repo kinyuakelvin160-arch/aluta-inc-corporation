@@ -1,0 +1,35 @@
+ALUTA INC CORPORATION — FREE WEBSITE LAUNCH GUIDE
+
+WHAT YOU CAN RUN FOR KES 0
+- Static website hosting: GitHub Pages, Cloudflare Pages, or Netlify's free tier (subject to each provider's current limits).
+- Domain: use the free hosting URL initially. A custom .com or .co.ke domain usually costs money, so skip it at launch.
+- Website: index.html is a standalone page and needs no paid server to display.
+- Subscriber form: the current demo validates the form and stores entries in the visitor's own browser. This is not a real mailing list and does not let you access subscribers centrally.
+- Market figures: currently sample/illustrative values. The “Refresh demo” button does not contact an exchange or market-data provider.
+
+RECOMMENDED FREE PUBLISHING ROUTE — GITHUB PAGES
+1. Create or sign in to a GitHub account.
+2. Create a new public repository named aluta-inc-corporation (or another name you prefer).
+3. Upload index.html to the repository's root folder.
+4. Open the repository's Settings → Pages.
+5. Under Build and deployment, choose “Deploy from a branch”, select the main branch and /(root), then Save.
+6. Wait for the deployment link to appear in Settings → Pages. It will usually look like https://YOUR-USERNAME.github.io/aluta-inc-corporation/
+7. Open the link on a phone and computer to test layout and navigation.
+
+FREE DATA REALITY CHECK
+- World market data: some providers offer limited free API tiers, delayed data, or restricted personal-use access. Read the provider's current licence, rate limits, and attribution requirements before publishing values.
+- Kenyan/NSE market data: reliable, machine-readable NSE prices may not be freely available for unrestricted redistribution. Check NSE's official site and data licensing terms. If a compliant free feed is unavailable, show links to official sources or clearly label manually updated/delayed figures rather than inventing live prices.
+- Do not put secret API keys inside index.html; visitors can inspect client-side code. If an API requires a secret key, use a free serverless function/backend with secret storage, if its free tier and provider terms permit it.
+- Automated email/WhatsApp alerts require a mailing-list or messaging service. Free tiers and WhatsApp Business rules can change; no alerts are currently sent by this prototype.
+
+BEFORE YOU ANNOUNCE THE SITE
+- Replace all sample values and sample market commentary with sourced data.
+- Show the source and timestamp beside each quote and state whether it is real-time or delayed.
+- Add a privacy notice, data retention process, contact address, and an unsubscribe process before collecting real subscriber information.
+- Test opt-in, keyboard navigation, phone layout, and links.
+- Include a clear statement that content is informational, not personalised investment advice.
+
+FILES
+- index.html — complete responsive website.
+- README.txt — feature notes and launch limitations.
+- FREE_LAUNCH_GUIDE.txt — free hosting steps and data/opt-in cautions.
